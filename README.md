@@ -13,8 +13,8 @@ To run the bot open the Command Prompt and go to where pancakebot.js is located 
 
 Then install all the modules with npm
 
-npm install ethers npm install telegram npm install input
+`npm install ethers` `npm install telegram` `npm install input`
 
 Then run the bot
 
-node pancakebot.js
+`node pancakebot.js`
