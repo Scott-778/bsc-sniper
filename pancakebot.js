@@ -264,6 +264,7 @@ async function onNewMessage(event) {
         const msg = ms.filter(function(str){
         return /\S/.test(str)});
 		var address = '';
+		let d = new Date().toLocaleString();
 		for (var i = 0; i < msg.length; i++) {
 			if (ethers.utils.isAddress(msg[i])) {
 				address = msg[i];
@@ -272,6 +273,7 @@ async function onNewMessage(event) {
 			if (msg[i] == "BNB") {
 				var liquidity = parseFloat(msg[i - 1]);
 				console.log('--- NEW TOKEN FOUND ---');
+				console.log('Time:', d);
 				console.log('Liquidity:', liquidity, 'BNB');
 			}
 			if (msg[i] == "Buy:" && msg[i - 1] != "Max" ) {
@@ -290,7 +292,8 @@ async function onNewMessage(event) {
 			if (liquidity < strategyLL.maxLiquidity &&
 				liquidity > strategyLL.minLiquidity &&
 				slipBuy < strategyLL.maxTax &&
-				slipSell < strategyLL.maxTax && msg.includes("BNB")) {
+				slipSell < strategyLL.maxTax &&
+				msg.includes("BNB") && msg.includes("Audit") && msg.includes("Report")) {
 
 				token.push({
 					tokenAddress: address,
@@ -319,7 +322,8 @@ async function onNewMessage(event) {
 			else if (liquidity < strategyML.maxLiquidity &&
 				liquidity > strategyML.minLiquidity &&
 				slipBuy < strategyML.maxTax &&
-				slipSell < strategyML.maxTax && msg.includes("BNB")) {
+				slipSell < strategyML.maxTax && 
+				msg.includes("BNB") && msg.includes("Audit") && msg.includes("Report")) {
 
 				token.push({
 					tokenAddress: address,
@@ -349,7 +353,8 @@ async function onNewMessage(event) {
 			else if (liquidity < strategyHL.maxLiquidity &&
 				liquidity > strategyHL.minLiquidity &&
 				slipBuy < strategyHL.maxTax &&
-				slipSell < strategyHL.maxTax && msg.includes("BNB")) {
+				slipSell < strategyHL.maxTax &&
+				msg.includes("BNB") && msg.includes("Audit") && msg.includes("Report")) {
 
 				token.push({
 					tokenAddress: address,
@@ -373,9 +378,9 @@ async function onNewMessage(event) {
 				console.log('<<< Attention! Buying token now! >>> Contract:', address);
 				buy();
 			} else {
-				console.log('--- Not buying this token does not match strategy ---');
+				console.log('Not buying this token does not match strategy! Waiting for telegram notification to buy...', '\n');
 			}
-		} else if (msg.includes('BNB')) {
+		} else if (msg.includes("BNB") && msg.includes("Audit") && msg.includes("Report")) {
 			// Buy all tokens no strategy
 			token.push({
 				tokenAddress: address,
