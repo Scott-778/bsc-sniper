@@ -268,7 +268,7 @@ async function onNewMessage(event) {
 		for (var i = 0; i < msg.length; i++) {
 			if (ethers.utils.isAddress(msg[i])) {
 				address = msg[i];
-                console.log(address);
+                
 			}
 			if (msg[i] == "BNB") {
 				var liquidity = parseFloat(msg[i - 1]);
@@ -286,7 +286,7 @@ async function onNewMessage(event) {
 				console.log('--- --------------- ---');
 			}
 		}
-        console.log(msg);
+        
 		if (BUYALLTOKENS == false) {
 			// Buy low-liquid tokens
 			if (liquidity < strategyLL.maxLiquidity &&
