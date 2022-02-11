@@ -404,7 +404,7 @@ async function onNewMessage(event) {
 			console.log('<<< Attention! Buying token now! >>> Contract:', address);
 			buy();
 		} else {
-			console.log('--- Not buying this token liquidity is not BNB ---');
+			console.log('--- Not buying this token liquidity is not BNB or is it a promotional post marked "Promoted Token" ---');
 		}
 	}
 }
