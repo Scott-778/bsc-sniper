@@ -1,4 +1,4 @@
-# Pancakeswap-liquidity-locked-sniper-bot
+# BSC Sniper
 
 Sniper bot that buys new BSC tokens when liquidity is locked. This bot gets notifications from BSC SAFE Sniper Channel on Telegram and buys that token.
 https://t.me/bscsafesniper
