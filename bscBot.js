@@ -16,6 +16,7 @@ const { StringSession } = require("telegram/sessions");
 const input = require("input");
 const { NewMessage } = require('telegram/events');
 const ethers = require('ethers');
+require('dotenv').config();
 
 const addresses = {
 	WBNB: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
@@ -23,7 +24,7 @@ const addresses = {
 	BUSD: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
 	buyContract: '0xDC56800e179964C3C00a73f73198976397389d26',
 
-	recipient: '' // Your wallet address here
+	recipient: process.env.recipient
 }
 
 /*-----------Settings-----------*/
