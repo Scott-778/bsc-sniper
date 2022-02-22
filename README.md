@@ -17,4 +17,4 @@ Then install all the modules with npm
 
 Then run the bot
 
-`node pancakebot.js`
+`node bscBot.js`
