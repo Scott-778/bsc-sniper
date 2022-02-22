@@ -9,12 +9,24 @@ Join my telegram group where we can talk about this project, tokens and the best
 
 Important! If you have an issue please don't post screenshots with personal information like seed phrase, telephone number, Telegram code, Telegram two factor password, or Telegram string session. Please keep that information private!
 
-To run the bot open the Command Prompt and go to where pancakebot.js is located on your computer with the change directory command cd C:\Path of where pancakebot.js is located
+## Getting Started
 
-Then install all the modules with npm
+First, if you don't have node.js installed go to nodejs.org and install the lastest LTS version.
+Then go to my.telegram.org and create an app to get apiID and apiHash.
+Then subscribe to this channel on Telegram https://t.me/bscsafesniper
+Then Use the following commands either in VScode or command prompt 
+```
+git clone https://github.com/Scott-778/bsc-sniper.git
+```
+```
+cd bsc-sniper
+```
+```
+npm install
+```
+Then edit .env file with your bsc wallet address, mnemonic, apiId and apiHash in your code editor and save file.
 
-`npm install ethers` `npm install telegram` `npm install input`
-
-Then run the bot
-
-`node bscBot.js`
+To start bot run this command
+```
+node bscBot.js
+```
