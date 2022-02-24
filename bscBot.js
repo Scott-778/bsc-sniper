@@ -45,9 +45,12 @@ const BUYALLTOKENS = true;
 const buyAllTokensStrategy = {
 
 	investmentAmount: '0.1', // Amount to invest per token in BNB
+	maxBuyTax: 10, 			// max buy tax
+	minBuyTax: 0,			// min buy tax
+	maxSellTax: 10,			// max sell tax
 	gasPrice: ethers.utils.parseUnits('6', 'gwei'),
 	profitPercent: 100,      // 100% profit
-	stopLossPercent: 10,  // 10% loss
+	stopLossPercent: 30,  // 10% loss
 	percentOfTokensToSellProfit: 75, // sell 75% when profit is reached
 	percentOfTokensToSellLoss: 100, // sell 100% when stoploss is reached 
 	trailingStopLossPercent: 15 // 15% trailing stoploss
@@ -64,7 +67,6 @@ const strategyLL =
 	minLiquidity: 1, 	  	// min Liquidity BNB
 	profitPercent: 250,          // 2.5X
 	stopLossPercent: 30,        // 30% loss
-	platform: "COINMARKETCAP",      // Either COINMARKETCAP or COINGECKO
 	gasPrice: ethers.utils.parseUnits('6', 'gwei'), // Gas Price. Higher is better for low liquidity
 	percentOfTokensToSellProfit: 75, // sell 75% when profit is reached
 	percentOfTokensToSellLoss: 100, // sell 100% when stoploss is reached 
@@ -82,7 +84,6 @@ const strategyML =
 	minLiquidity: 150, 	  	// min Liquidity BNB
 	profitPercent: 80,          // 80% profit
 	stopLossPercent: 20,        // 20% loss
-	platform: "COINMARKETCAP",          // Either COINMARKETCAP or COINGECKO
 	gasPrice: ethers.utils.parseUnits('6', 'gwei'),
 	percentOfTokensToSellProfit: 75, // sell 75% when profit is reached
 	percentOfTokensToSellLoss: 100, // sell 100% when stoploss is reached
@@ -100,7 +101,6 @@ const strategyHL =
 	minLiquidity: 300, 	  	// min Liquidity BNB
 	profitPercent: 50,          // 50% profit
 	stopLossPercent: 10,        // 10% loss
-	platform: "COINMARKETCAP",      // Either COINMARKETCAP or COINGECKO
 	gasPrice: ethers.utils.parseUnits('6', 'gwei'),
 	percentOfTokensToSellProfit: 75, // sell 75% of tokens when profit is reached
 	percentOfTokensToSellLoss: 100, // sell 100% of tokens when stoploss is reached
@@ -200,7 +200,7 @@ async function checkForProfit(token) {
 		let currentValue = await getCurrentValue(token);
 		const takeProfit = (parseFloat(ethers.utils.formatUnits(token.intitialValue)) * (token.profitPercent + token.tokenSellTax) / 100 + parseFloat(ethers.utils.formatUnits(token.intitialValue))).toFixed(18).toString();
 		const profitDesired = ethers.utils.parseUnits(takeProfit);
-		let stopLossTrailing = ethers.utils.parseUnits((parseFloat(ethers.utils.formatUnits(token.intitialValue)) * (token.trailingStopLossPercent / 100 - token.tokenSellTax / 100 - token.stopLossPercent / 100) + parseFloat(ethers.utils.formatUnits(token.intitialValue))).toFixed(18).toString());
+		let stopLossTrailing = ethers.utils.parseUnits((parseFloat(ethers.utils.formatUnits(token.intitialValue)) - (parseFloat(ethers.utils.formatUnits(token.intitialValue)) * (((token.stopLossPercent + token.tokenSellTax) - token.trailingStopLossPercent) / 100))).toFixed(18).toString());
 		let stopLoss = token.stopLoss;
 
 		if (currentValue.gt(stopLossTrailing) && token.trailingStopLossPercent > 0) {
@@ -289,13 +289,16 @@ async function sell(tokenObj, isProfit) {
 })();
 
 async function onNewMessage(event) {
-	const message = event.message;
-	if (message.peerId.channelId == channelId) {
+    const message = event.message;
+    	if (message.peerId.channelId == channelId) {
+		console.log('--- NEW TOKEN FOUND ---');
+		let timeStamp = new Date().toLocaleString();
+		console.log(timeStamp);
 		const ms = message.message.replace(/\n/g, " ").replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g," ").split(" ");
-        const msg = ms.filter(function(str){
-        return /\S/.test(str)});
+		const msg = ms.filter(function(str){
+		return /\S/.test(str)});
 		var address = '';
-		let d = new Date().toLocaleString();
+		var shouldBuy = true;
 		for (var i = 0; i < msg.length; i++) {
 			if (ethers.utils.isAddress(msg[i])) {
 				address = msg[i];
@@ -316,6 +319,10 @@ async function onNewMessage(event) {
 				console.log('Sell tax:', slipSell, '%');
 				console.log('--- --------------- ---');
 			}
+		}
+		if (msg.includes("Scam") || msg.includes("SCAM") || msg.includes("Unsafe")) {
+			var shouldBuy = false;
+			console.log('Report: Scam!');
 		}
         
 		if (BUYALLTOKENS == false) {
