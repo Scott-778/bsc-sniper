@@ -299,12 +299,12 @@ async function onNewMessage(event) {
 		for (var i = 0; i < msg.length; i++) {
 			if (ethers.utils.isAddress(msg[i])) {
 				address = msg[i];
+				console.log('Contract:', address);
                 
 			}
 			if (msg[i] == "BNB") {
 				var liquidity = parseFloat(msg[i - 1]);
 				console.log('--- NEW TOKEN FOUND ---');
-				console.log('Time:', d);
 				console.log('Liquidity:', liquidity, 'BNB');
 			}
 			if (msg[i] == "Buy:" && msg[i - 1] != "Max" ) {
