@@ -211,7 +211,7 @@ async function checkForProfit(token) {
 		//process.stdout.write(enc(`${timeStamp} --- ${tokenName} --- Current Value in BNB: ${ethers.utils.formatUnits(currentValue)} --- Profit At: ${ethers.utils.formatUnits(profitDesired)} --- Stop Loss At: ${ethers.utils.formatUnits(stopLoss)} \r`));
 		console.log(`${timeStamp} --- ${tokenName} --- Current Value in BNB: ${ethers.utils.formatUnits(currentValue)} --- Profit At: ${ethers.utils.formatUnits(profitDesired)} --- Stop Loss At: ${ethers.utils.formatUnits(token.stopLoss)}`);
 		if (currentValue.gte(profitDesired)) {
-			if (buyCount <= config.numberOfTokensToBuy && !token.didSell && token.didBuy && sellAttempts == 0) {
+			if (buyCount <= numberOfTokensToBuy && !token.didSell && token.didBuy && sellAttempts == 0) {
 				sellAttempts++;
 				console.log("Selling", tokenName, "now profit target reached", "\n");
 				sell(token, true);
@@ -220,7 +220,7 @@ async function checkForProfit(token) {
 		}
 
 		if (currentValue.lte(stopLoss)) {
-			if (buyCount <= config.numberOfTokensToBuy && !token.didSell && token.didBuy && sellAttempts == 0) {
+			if (buyCount <= numberOfTokensToBuy && !token.didSell && token.didBuy && sellAttempts == 0) {
 				sellAttempts++;
 				console.log("Selling", tokenName, "now stoploss reached", "\n");
 				sell(token, false);
